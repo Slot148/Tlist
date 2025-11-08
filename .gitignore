@@ -2,3 +2,6 @@ lib/*
 lib/
 build/*
 build/
+tests/
+tests/*
+tests
