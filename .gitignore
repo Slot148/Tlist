@@ -1,5 +1,3 @@
-lib/*
-lib/
 build/*
 build/
 tests/

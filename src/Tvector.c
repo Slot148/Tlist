@@ -135,3 +135,29 @@ void* array_list_get(ArrayList list, int index){
     }
     return list->_array[index];
 }
+
+void array_list_push_back(ArrayList list, ...){
+    if (list == NULL) {
+        fprintf(stderr, "Error in array_list_push_back(): The provided list instance is NULL.\n");
+        return;
+    }
+}
+
+void array_list_resize(ArrayList list){
+    if (list == NULL) {
+        fprintf(stderr, "Error in array_list_resize(): The provided list instance is NULL.\n");
+        return;
+    }   
+}
+
+// void array_list_clear(ArrayList list){
+
+// }
+
+// ArrayList array_list_clone(ArrayList list){
+
+// }
+
+// int array_list_contains(ArrayList list, ...){
+    
+// }

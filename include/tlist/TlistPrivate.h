@@ -1,13 +1,13 @@
 #ifndef T_LIST_PRIVATE
 #define T_LIST_PRIVATE
 
-#include "Tlist.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include "Tlist.h"
 
 struct Node{
     void *_val;      
