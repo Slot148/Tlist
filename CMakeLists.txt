@@ -45,3 +45,12 @@ install(EXPORT TlistTargets
     NAMESPACE Tlist::
     DESTINATION share/tlist
 )
+
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/tlistConfig.cmake"
+    "include(CMakeFindDependencyMacro)\n"
+    "include(\${CMAKE_CURRENT_LIST_DIR}/TlistTargets.cmake)\n"
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tlistConfig.cmake"
+    DESTINATION share/tlist
+)
