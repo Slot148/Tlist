@@ -21,7 +21,7 @@ target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
 
 target_include_directories(Tlist PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:include/tlist>
 )
 
 set_target_properties(Tlist PROPERTIES
