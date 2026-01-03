@@ -17,16 +17,13 @@ add_library(Tlist STATIC
     src/Tvector.c
 )
 
+add_library(Tlist::Tlist ALIAS Tlist)
+
 target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
 
-get_filename_component(TLIST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/tlist" ABSOLUTE)
 target_include_directories(Tlist PUBLIC
-    $<BUILD_INTERFACE:${TLIST_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include>
-)
-
-set_target_properties(Tlist PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 # --- REGRAS DE INSTALAÇÃO (para o vcpkg) ---
