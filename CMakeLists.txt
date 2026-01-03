@@ -17,27 +17,22 @@ add_library(Tlist STATIC
     src/Tvector.c
 )
 
-add_library(Tlist::Tlist ALIAS Tlist)
-
 target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
 
 target_include_directories(Tlist PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:include>
 )
 
-# --- REGRAS DE INSTALAÇÃO (para o vcpkg) ---
-include(GNUInstallDirs)
+add_library(Tlist::Tlist ALIAS Tlist)
 
 install(TARGETS Tlist
     EXPORT TlistTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} 
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
 )
 
-install(DIRECTORY include/tlist DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/tlist DESTINATION include)
 
 install(EXPORT TlistTargets
     FILE TlistTargets.cmake
