@@ -1,5 +1,5 @@
-#include "Tlist.h"
-#include "TlistPrivate.h"
+#include "tlist/Tlist.h"
+#include "tlist/TlistPrivate.h"
 
 List new_list(Type type){
     List this = (List)malloc(sizeof(struct List));
