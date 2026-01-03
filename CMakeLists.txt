@@ -45,3 +45,30 @@ install(EXPORT TlistTargets
     NAMESPACE Tlist::
     DESTINATION share/tlist
 )
+
+# --- CONFIG FILE ---
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/TlistConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_DATADIR}/tlist
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/tlist
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/tlist
+)
