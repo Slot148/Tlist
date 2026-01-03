@@ -19,20 +19,26 @@ add_library(Tlist STATIC
 
 target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
 
-target_include_directories(Tlist PUBLIC
+target_include_directories(Tlist PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-add_library(Tlist::Tlist ALIAS Tlist)
+set_target_properties(Tlist PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
+
+# --- REGRAS DE INSTALAÇÃO (para o vcpkg) ---
+include(GNUInstallDirs)
 
 install(TARGETS Tlist
     EXPORT TlistTargets
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(DIRECTORY include/tlist DESTINATION include)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT TlistTargets
     FILE TlistTargets.cmake
