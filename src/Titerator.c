@@ -1,5 +1,5 @@
-#include "tlist/Tlist.h"
-#include "tlist/TlistPrivate.h"
+#include "Tlist.h"
+#include "TlistPrivate.h"
 
 TIterator new_iterator(const List list){
     TIterator iterator = malloc(sizeof(struct TIterator));
