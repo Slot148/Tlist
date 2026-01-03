@@ -20,7 +20,7 @@ add_library(Tlist STATIC
 target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
 
 target_include_directories(Tlist PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/tlist>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
@@ -41,7 +41,7 @@ install(TARGETS Tlist
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT TlistTargets
-    FILE tlistConfig.cmake
+    FILE TlistTargets.cmake
     NAMESPACE Tlist::
     DESTINATION share/tlist
 )
