@@ -19,9 +19,10 @@ add_library(Tlist STATIC
 
 target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
 
-target_include_directories(Tlist PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include/tlist>
+get_filename_component(TLIST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/tlist" ABSOLUTE)
+target_include_directories(Tlist PUBLIC
+    $<BUILD_INTERFACE:${TLIST_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:include>
 )
 
 set_target_properties(Tlist PROPERTIES
