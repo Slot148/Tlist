@@ -41,7 +41,7 @@ install(TARGETS Tlist
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT TlistTargets
-    FILE TlistTargets.cmake
+    FILE tlistConfig.cmake
     NAMESPACE Tlist::
     DESTINATION share/tlist
 )
