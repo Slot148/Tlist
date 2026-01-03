@@ -36,21 +36,13 @@ install(TARGETS Tlist
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} 
 )
 
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/tlist DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT TlistTargets
     FILE TlistTargets.cmake
     NAMESPACE Tlist::
-    DESTINATION share/tlist
-)
-
-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/tlistConfig.cmake"
-    "include(CMakeFindDependencyMacro)\n"
-    "include(\${CMAKE_CURRENT_LIST_DIR}/TlistTargets.cmake)\n"
-)
-
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tlistConfig.cmake"
     DESTINATION share/tlist
 )
