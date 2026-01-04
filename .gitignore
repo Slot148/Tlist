@@ -1,5 +1,7 @@
 build/*
 build/
+tlist/*
+tlist/
 tests/
 tests/*
 tests

@@ -1,14 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
-project(tlist VERSION 1.0.0 LANGUAGES C)
+project(lista2)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
+file(MAKE_DIRECTORY 
+    ${CMAKE_SOURCE_DIR}/tlist
+    ${CMAKE_SOURCE_DIR}/tlist/include
+    ${CMAKE_SOURCE_DIR}/tlist/lib
+)
+
 if(MSVC)
-    set(COMPILE_FLAGS /W4 /WX)
+set(COMPILE_FLAGS /W4 /WX)
 else()
-    set(COMPILE_FLAGS -Wall -Wextra -Wpedantic -Werror)
+set(COMPILE_FLAGS -Wall -Wextra -Wpedantic -Werror)
 endif()
 
 add_library(Tlist STATIC 
@@ -16,59 +22,12 @@ add_library(Tlist STATIC
     src/Titerator.c 
     src/Tvector.c
 )
-
+    
 target_compile_options(Tlist PRIVATE ${COMPILE_FLAGS})
+target_include_directories(Tlist PUBLIC include)
 
-target_include_directories(Tlist PUBLIC 
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
+file(COPY ${CMAKE_SOURCE_DIR}/include/tlist/ DESTINATION ${CMAKE_SOURCE_DIR}/tlist/include)
 
 set_target_properties(Tlist PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-)
-
-# --- REGRAS DE INSTALAÇÃO (para o vcpkg) ---
-include(GNUInstallDirs)
-
-install(TARGETS Tlist
-    EXPORT TlistTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-install(EXPORT TlistTargets
-    FILE TlistTargets.cmake
-    NAMESPACE Tlist::
-    DESTINATION share/tlist
-)
-
-# --- CONFIG FILE ---
-include(CMakePackageConfigHelpers)
-
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/TlistConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_DATADIR}/tlist
-)
-
-write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/tlist
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/tlist
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tlist/lib
 )
