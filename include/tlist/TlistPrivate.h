@@ -35,6 +35,7 @@ struct ArrayList{
     size_t _size;
     int _length;
     void(*to_string)(void*);
+    void(*clear_function)(void*);
 };
 
 /** @private */

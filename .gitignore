@@ -7,3 +7,5 @@ tests/*
 tests
 __cmake_systeminformation/
 __cmake_systeminformation/*
+TODO.txt
+main.c

@@ -31,3 +31,6 @@ file(COPY ${CMAKE_SOURCE_DIR}/include/tlist/ DESTINATION ${CMAKE_SOURCE_DIR}/tli
 set_target_properties(Tlist PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tlist/lib
 )
+
+add_executable(main main.c)
+target_link_libraries(main PRIVATE Tlist)
