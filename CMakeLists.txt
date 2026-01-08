@@ -1,5 +1,5 @@
-cmake_minimum_required( VERSION 3.10)
-project(tlist VERSION 1.0.0 LANGUAGES C)
+cmake_minimum_required(VERSION 3.10)
+project(tlist VERSION 1.0.3 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -33,12 +33,12 @@ target_include_directories(Tlist PUBLIC
 )
 
 install(TARGETS Tlist 
-    EXPORT TlistTargets.cmake
+    EXPORT TlistTargets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
 )
-install(DIRECTORY include/tlist DESTINATION include)
+install(DIRECTORY include/ DESTINATION include)
 
 install(EXPORT TlistTargets
     FILE TlistTargets.cmake
@@ -62,6 +62,10 @@ write_basic_package_version_file(
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/TlistConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/TlistConfigVersion.cmake"
+    DESTINATION share/tlist
+)
+
+install(FILES LICENSE
     DESTINATION share/tlist
 )
 
