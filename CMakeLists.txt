@@ -5,11 +5,20 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
+option(TLIST_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
+
 if(MSVC)
-set(COMPILE_FLAGS /W4 /WX)
+  set(COMPILE_FLAGS /W4)
+  if(TLIST_WARNINGS_AS_ERRORS)
+    list(APPEND COMPILE_FLAGS /WX)
+  endif()
 else()
-set(COMPILE_FLAGS -Wall -Wextra -Wpedantic -Werror)
+  set(COMPILE_FLAGS -Wall -Wextra -Wpedantic)
+  if(TLIST_WARNINGS_AS_ERRORS)
+    list(APPEND COMPILE_FLAGS -Werror)
+  endif()
 endif()
+
 
 add_library(Tlist STATIC 
     src/Tlist.c 
