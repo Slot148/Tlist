@@ -36,18 +36,18 @@ Esta Biblioteca fornece estruturas de listas e arrays flexiveis que podem armaze
         - `list_pick`: remove e retorna o elemento na posição especificada.
         - `list_foreach`: executa uma função para cada elemento da lista.
     - Arrays Dinâmicos:
-        - `new_array_list`: cria um novo array vazio.
-        - `array_list_clone`: cria uma cópia do array.
-        - `array_list_print`: imprime os elementos do array.
-        - `array_list_length`: retorna a quantidade de elementos do array.
-        - `array_list_free`: libera a memória alocada pelo array.
-        - `array_list_get`: retorna um ponteiro para o elemento na posição especificada.
-        - `array_list_set`: define o elemento na posição especificada.
-        - `array_list_clear`: remove todos os elementos do array e define como NULL.
-        - `array_list_resize`: altera o tamanho do array.
-        - `array_list_push_back`: adiciona o elemento ao final do array.
-        - `array_list_toString`: define a função de callback com a formatção da string a ser retornada.
-        - `array_list_clearFunctio`: Define a função usada para liberar a memória utilizada por tipos personalizados.
+        - `new_array`: cria um novo array vazio.
+        - `array_clone`: cria uma cópia do array.
+        - `array_print`: imprime os elementos do array.
+        - `array_length`: retorna a quantidade de elementos do array.
+        - `array_free`: libera a memória alocada pelo array.
+        - `array_get`: retorna um ponteiro para o elemento na posição especificada.
+        - `array_set`: define o elemento na posição especificada.
+        - `array_clear`: remove todos os elementos do array e define como NULL.
+        - `array_resize`: altera o tamanho do array.
+        - `array_push_back`: adiciona o elemento ao final do array.
+        - `array_toString`: define a função de callback com a formatção da string a ser retornada.
+        - `array_clearFunctio`: Define a função usada para liberar a memória utilizada por tipos personalizados.
 
 ## Requisitos
 - CMake
