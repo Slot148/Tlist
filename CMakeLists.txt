@@ -68,6 +68,3 @@ install(FILES
 install(FILES LICENSE
     DESTINATION share/tlist
 )
-
-# add_executable(main main.c)
-# target_link_libraries(main PRIVATE Tlist)

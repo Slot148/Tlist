@@ -1,5 +1,5 @@
-#include "tlist/Tlist.h"
-#include "tlist/TlistPrivate.h"
+#include "../include/tlist/TlistPrivate.h"
+#include "../include/tlist/Tlist.h"
 
 TIterator new_iterator(const List list){
     TIterator iterator = malloc(sizeof(struct TIterator));
@@ -42,4 +42,17 @@ void iterator_free(TIterator iterator){
 void iterator_reset(TIterator iterator){
     iterator->_current = iterator->_list->_head;
     iterator->_index = 0;
+}
+
+void _catch_status(Status status_code, const char* message, const char* file, int line, const char* function){
+    static const char* status[] = {
+        [OK] = "OK", 
+        [WARNING] = "WARNING",
+        [ERROR] = "ERROR",
+        [FATAL_ERROR] = "FATAL ERROR"
+    };
+    FILE* stream = (status_code == ERROR || status_code == WARNING) ? stderr : stdout;
+    fprintf(stream, "(%s)[%s:%d in %s()] %s\n", status[status_code], file, line, function, message);
+    if(status_code == ERROR) return;
+    if(status_code == FATAL_ERROR) exit(EXIT_FAILURE);
 }

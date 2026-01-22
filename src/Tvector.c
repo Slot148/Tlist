@@ -1,15 +1,15 @@
-#include "tlist/Tlist.h"
-#include "tlist/TlistPrivate.h"
+#include "../include/tlist/Tlist.h"
+#include "../include/tlist/TlistPrivate.h"
 
-ArrayList new_array_list(Type type, int capacity){
+ArrayList new_array(Type type, int capacity){
     ArrayList list = (ArrayList)malloc(sizeof(struct ArrayList));
     if(list == NULL) {
-        fprintf(stderr, "Error in new_array_list(): Failed to allocate memory for the new list.\n");
+        fprintf(stderr, "Error in new_array(): Failed to allocate memory for the new list.\n");
         exit(EXIT_FAILURE);
     }
     list->_array = (void **)malloc(capacity * sizeof(void *));
         if (list->_array == NULL) {
-        fprintf(stderr, "Error in new_array_list(): Failed to allocate memory for the array.\n");
+        fprintf(stderr, "Error in new_array(): Failed to allocate memory for the array.\n");
         free(list);
         exit(EXIT_FAILURE);
     }
@@ -34,17 +34,17 @@ ArrayList new_array_list(Type type, int capacity){
     return list;
 }
 
-int array_list_length(ArrayList list){
+int array_length(ArrayList list){
     return list->_length;
 }
 
-void array_list_set(ArrayList list, int index, ...){
+void array_set(ArrayList list, int index, ...){
     if (list == NULL) {
-        fprintf(stderr, "Error in array_list_set(): The provided list instance is NULL.\n");
+        fprintf(stderr, "Error in array_set(): The provided list instance is NULL.\n");
         return;
     }
     if (index < 0 || index >= list->_capacity) {
-        fprintf(stderr, "Error in array_list_set(): Index %d is out of bounds. Valid range is 0 to %d.\n", index, list->_capacity - 1);
+        fprintf(stderr, "Error in array_set(): Index %d is out of bounds. Valid range is 0 to %d.\n", index, list->_capacity - 1);
         return;
     }
     va_list args;
@@ -89,7 +89,7 @@ void array_list_set(ArrayList list, int index, ...){
     va_end(args);
 } 
 
-void array_list_print(ArrayList list) {
+void array_print(ArrayList list) {
     printf("[");
     for (int i = 0; i < list->_length; i++) {
         if (list->_array[i] != NULL) { 
@@ -113,14 +113,14 @@ void array_list_print(ArrayList list) {
     printf("]\n");
 }
 
-void array_list_toString(ArrayList list, void(*function)(void*)){
+void array_set_toString(ArrayList list, void(*function)(void*)){
     list->to_string = function;
 }
-void array_list_clearFunction(ArrayList list ,void(*function)(void*)){
+void array_set_clearFunction(ArrayList list ,void(*function)(void*)){
     list->clear_function = function;
 }
 
-void array_list_free(ArrayList list){
+void array_free(ArrayList list){
     if (list == NULL) return;
     
     if(list->clear_function != NULL){
@@ -134,7 +134,7 @@ void array_list_free(ArrayList list){
             if (list->_array[i] != NULL && list->_type != T){
                 free(list->_array[i]);
             }else{
-                fprintf(stderr, "Warning in array_list_free(): No clear function provided for custom type at index %d. Skipping free operation.\n", i);
+                fprintf(stderr, "Warning in array_free(): No clear function provided for custom type at index %d. Skipping free operation.\n", i);
             }
         }
     }
@@ -143,25 +143,25 @@ void array_list_free(ArrayList list){
     free(list);
 }
 
-void* array_list_get(ArrayList list, int index){
+void* array_get(ArrayList list, int index){
     if (list == NULL) {
-        fprintf(stderr, "Error in array_list_get(): The provided list instance is NULL.\n");
+        fprintf(stderr, "Error in array_get(): The provided list instance is NULL.\n");
         return NULL;
     }
     if (index < 0 || index >= list->_length) {
-        fprintf(stderr, "Error in array_list_get(): Index %d is out of bounds. Valid range is 0 to %d.\n", index, list->_length - 1);
+        fprintf(stderr, "Error in array_get(): Index %d is out of bounds. Valid range is 0 to %d.\n", index, list->_length - 1);
         return NULL;
     }
     return list->_array[index];
 }
 
-void array_list_push_back(ArrayList list, ...){
+void array_push_back(ArrayList list, ...){
     if (list == NULL) {
-        fprintf(stderr, "Error in array_list_push_back(): The provided list instance is NULL.\n");
+        fprintf(stderr, "Error in array_push_back(): The provided list instance is NULL.\n");
         return;
     }
     if(list->_length == list->_capacity) {
-        fprintf(stderr, "Error in array_list_push_back(): Out of index.\n");
+        fprintf(stderr, "Error in array_push_back(): Out of index.\n");
         return;
     }
 
@@ -200,9 +200,9 @@ void array_list_push_back(ArrayList list, ...){
     va_end(args);
 }
 
-void array_list_resize(ArrayList list, int new_size){
+void array_resize(ArrayList list, int new_size){
     if (list == NULL) {
-        fprintf(stderr, "Error in array_list_resize(): The provided list instance is NULL.\n");
+        fprintf(stderr, "Error in array_resize(): The provided list instance is NULL.\n");
         return;
     }
     list->_array = (void**)realloc(list->_array, new_size * sizeof(void*));
@@ -213,9 +213,9 @@ void array_list_resize(ArrayList list, int new_size){
     if (list->_length > new_size) list->_length = new_size;
 }
 
-void array_list_clear(ArrayList list){
+void array_clear(ArrayList list){
     if (list == NULL) {
-        fprintf(stderr, "Error in array_list_clear(): The provided list instance is NULL.\n");
+        fprintf(stderr, "Error in array_clear(): The provided list instance is NULL.\n");
         return;
     }
     for(int i = 0; i < list->_length; i++){
@@ -226,41 +226,44 @@ void array_list_clear(ArrayList list){
             list->clear_function(list->_array[i]);
             list->_array[i] = NULL;
         }else{
-            fprintf(stderr, "Warning in array_list_clear(): No clear function provided for custom type at index %d. Skipping clear operation.\n", i);
+            fprintf(stderr, "Warning in array_clear(): No clear function provided for custom type at index %d. Skipping clear operation.\n", i);
         }
     }
     list->_length = 0;    
 }
 
-ArrayList array_list_clone(ArrayList list){
+ArrayList array_duplicate(ArrayList list){
     if (list == NULL) {
-        fprintf(stderr, "Error in array_list_clone(): The provided list instance is NULL.\n");
+        fprintf(stderr, "Error in array_clone(): The provided list instance is NULL.\n");
         return NULL;
     }
-    ArrayList new_list = new_array_list(list->_type, list->_capacity);
+    ArrayList new = new_array(list->_type, list->_capacity);
+    if(list->to_string != NULL) new->to_string = list->to_string;
+    if(list->clear_function != NULL) new->clear_function = list->clear_function;
+        
     for(int i = 0; i < list->_length; i++){
         switch (list->_type){
             case INT:{
-                array_list_set(new_list, i, *(int*)list->_array[i]);
+                array_set(new, i, *(int*)list->_array[i]);
                 break;
             }
             case STRING:{
-                array_list_set(new_list, i, (char*)list->_array[i]);
+                array_set(new, i, (char*)list->_array[i]);
                 break;
             }
             case DOUBLE:{
-                array_list_set(new_list, i, *(double*)list->_array[i]);
+                array_set(new, i, *(double*)list->_array[i]);
                 break;
             }
             case FLOAT:{
-                array_list_set(new_list, i, *(float*)list->_array[i]);
+                array_set(new, i, *(float*)list->_array[i]);
                 break;
             }
             default:{
-                array_list_set(new_list, i, list->_array[i]);
+                array_set(new, i, list->_array[i]);
                 break;
             }
         }
     }
-    return new_list;
+    return new;
 }

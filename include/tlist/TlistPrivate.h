@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include "Tlist.h"
 
+typedef enum Status{OK, WARNING, ERROR, FATAL_ERROR}Status;
 struct Node{
     void *_val;      
     Node _nextNode;  
@@ -26,6 +27,8 @@ struct List{
     Type _type;
     size_t _size;
     int _length;
+    void(*to_string)(void*);
+    void(*clear_function)(void*);
 };
 
 struct ArrayList{
@@ -43,6 +46,8 @@ Node _new_node(void *val, size_t size, Type type);
 void _under_push(List this, Node node);
 void _under_insert(List this, int index, Node node);
 void* _clone_value(Node node, Type type);
+void _catch_status(Status status_code, const char* message, const char* file, int line, const char* function);
+
+#define CATCH_STATUS(status_code, message) _catch_status(status_code, message, __FILE_NAME__, __LINE__, __func__)
 
 #endif
-

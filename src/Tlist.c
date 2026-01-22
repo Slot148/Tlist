@@ -1,44 +1,29 @@
-#include "tlist/Tlist.h"
-#include "tlist/TlistPrivate.h"
+#include "../include/tlist/TlistPrivate.h"
+#include "../include/tlist/Tlist.h"
 
 List new_list(Type type){
     List this = (List)malloc(sizeof(struct List));
-    if(this == NULL) {
-        fprintf(stderr, "Error in newList(): Failed to allocate memory for the new list.\n");
-        exit(EXIT_FAILURE);
-    }
+    if(this == NULL) CATCH_STATUS(FATAL_ERROR, "Failed to allocate memory for the new list.");
     this->_head = NULL;
     this->_tail = NULL;
     this->_type = type;
     this->_length = 0;
+    this->clear_function = NULL;
+    this->to_string = NULL;
 
     switch(type){
-        case INT:
-            this->_size = sizeof(int);
-            break;
-        case STRING:
-            this->_size = sizeof(char *);
-            break;
-        case DOUBLE:
-            this->_size = sizeof(double);
-            break;
-        case FLOAT:
-            this->_size = sizeof(float);
-            break;
-        case T:
-            this->_size = sizeof(void *);
-            break;
+        case INT: this->_size = sizeof(int); break;
+        case STRING: this->_size = sizeof(char *); break;
+        case DOUBLE:this->_size = sizeof(double);break;
+        case FLOAT:this->_size = sizeof(float);break;
+        case T:this->_size = sizeof(void *);break;
     }
-
     return this;
 }
 
 Node _new_node(void *val, size_t size, Type type){
     Node node = (Node)malloc(sizeof(struct Node));    
-    if(node == NULL) {
-        fprintf(stderr, "Error in _new_node(): Failed to allocate memory for a new node.\n");
-        exit(EXIT_FAILURE);
-    }
+    if(node == NULL) CATCH_STATUS(ERROR, "Failed to allocate memory for the new node.");
     if (type == STRING) {
         if (val == NULL) {
             fprintf(stderr, "Error in _new_node(): Cannot create a STRING node from a NULL pointer.\n");
@@ -72,28 +57,27 @@ void list_print(List this){
         return;
     }
     printf("[");
-    for (Node current = this->_head; current != NULL; current = current->_nextNode){
-        switch (this->_type){
-            case INT:
-                printf("%d", *(int *)current->_val);
-                break;
-            case STRING:
-                printf("\"%s\"", (char *)current->_val);
-                break;
-            case DOUBLE:
-                printf("%.2f", *(double *)current->_val);
-                break;
-            case FLOAT:
-                printf("%.2f", *(float *)current->_val);
-                break;
-            case T:
-                printf("%p", current->_val);
-                break;
+        if(this->to_string == NULL){
+            for (Node current = this->_head; current != NULL; current = current->_nextNode){
+                switch (this->_type){
+                    case INT: printf("%d", *(int *)current->_val); break;
+                    case STRING: printf("\"%s\"", (char *)current->_val); break;
+                    case DOUBLE: printf("%.2f", *(double *)current->_val); break;
+                    case FLOAT: printf("%.2f", *(float *)current->_val); break;
+                    case T: printf("%p", current->_val); break;
+                }
+                if (current->_nextNode != NULL){
+                    printf(", ");
+                }
+            }
+        }else{
+            for (Node current = this->_head; current != NULL; current = current->_nextNode){
+                this->to_string(current->_val);    
+                if (current->_nextNode != NULL){
+                    printf(", ");
+                }
+            }
         }
-        if (current->_nextNode != NULL){
-            printf(", ");
-        }
-    }
     printf("]");
     printf("\n");
 }
@@ -107,7 +91,14 @@ void list_free(List this){
     while (current != NULL){
         Node temp = current;
         current = temp->_nextNode;
-        if(this->_type != T) free(temp->_val);
+        if(this->clear_function != NULL){
+            this->clear_function(temp->_val);
+        }else if(this->_type != T){
+            free(temp->_val);
+        }else{
+            fprintf(stderr, "Warning in list_free(): No clear function provided for custom type. Skipping free operation.\n");
+        }
+        
         free(temp);
     }
     this->_head = NULL;
@@ -127,10 +118,7 @@ void _under_push(List this, Node node){
 }
 
 void list_push(List this, ...){
-    if (this == NULL) {
-        fprintf(stderr, "Error in push(): The provided list instance is NULL.\n");
-        return;
-    }
+    if (this == NULL) CATCH_STATUS(ERROR, "Error in push(): The provided list instance is NULL.");
     va_list args;
     va_start(args, this);
     switch (this->_type){
@@ -484,6 +472,9 @@ List list_duplicate(const List this){
     List list = new_list(this->_type);
     TIterator iterator = new_iterator(this);
     
+    if(this->to_string != NULL) list->to_string = this->to_string;
+    if(this->clear_function != NULL) list->clear_function = this->clear_function;
+
     while(iterator_has_next(iterator)){
         void* val = iterator_next(iterator);
         switch (this->_type){
@@ -496,4 +487,14 @@ List list_duplicate(const List this){
     }
     iterator_free(iterator);
     return list;
+}
+
+void list_set_toString(List list, void(*function)(void*)){
+    list->to_string = function;
+    return;
+}       
+
+void list_set_clearFunction(List list, void(*function)(void*)){
+    list->clear_function = function;
+    return;
 }
